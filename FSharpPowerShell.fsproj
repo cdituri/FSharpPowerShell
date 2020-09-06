@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Library.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PowerShellStandard.Library" Version="5.1.0" />
+  </ItemGroup>
+
+  <Target Name="PublishPowerShellScript" AfterTargets="Publish">
+    <Copy SourceFiles="Script.ps1" DestinationFolder="$(PublishDir)" />
+  </Target>
+
+  <Target Name="RunScript">
+    <Exec Command="pwsh.exe $(PublishDir)Script.ps1" />
+  </Target>
+
+  <Target Name="DockerBuild">
+    <Exec Command="docker build -t cdituri/fsharp-powershell ." />
+  </Target>
+
+  <Target Name="DockerRun">
+    <Exec Command="docker run -t --rm cdituri/fsharp-powershell" />
+  </Target>
+
+</Project>
